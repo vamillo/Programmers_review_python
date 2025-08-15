@@ -1,0 +1,36 @@
+from collections import deque
+def solution(board):
+    nx , ny = (0,0)
+    gx , gy = (0,0)
+    count = 0
+    q = deque()
+    visited = set()
+    move = [(-1,0) , (+1 , 0) , (0 , -1) , (0 , +1)]
+    # visited에 방문한 좌표를 저장
+
+    for i , row in enumerate(board):
+        for j , column in enumerate(row):
+            if column == "R":
+                q.append((i,j))
+                visited.add((i,j))
+            if column == "G":
+                gx , gy = (i,j)
+
+    while(q):
+        for _ in range(len(q)):
+            x , y = q.popleft()
+            if (x , y) == (gx , gy):
+                return count
+            for dx , dy in move:
+                nx , ny = x , y
+                while(0<=nx + dx< len(board) and 0<= ny+dy < len(board[0])                     and board[dx + nx][dy + ny] != "D"):
+                    nx += dx
+                    ny += dy
+                if (nx , ny) not in visited:
+                    q.append((nx , ny))
+                    visited.add((nx,ny))
+        count += 1
+
+
+    #q에 있는 모든 점을 순회... -> 더이상 갈 지점이 존재 X
+    return -1
